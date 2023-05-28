@@ -22,7 +22,7 @@ function App() {
     <FirestoreProvider sdk={firestoreInstance}>
       {/* <h1>🌯</h1>
       <BurritoTaste /> */}
-      <h1>The site is under construction</h1>
+      <h1>The site is under maintenance</h1>
     </FirestoreProvider>
   );
 }
