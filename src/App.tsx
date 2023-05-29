@@ -1,5 +1,6 @@
 import HomePage from './pages/home'
 import JobsPage from './pages/jobs'
+import  CreateJobPage from './pages/jobs/_create'
 import LoginPage from './pages/login'
 import RegisterPage from './pages/register'
 import LogoutPage from './pages/logout'
@@ -28,6 +29,7 @@ export default function App() {
               <Route element={<PrivateRoutes/>}>
                 <Route path="/" element={<HomePage/>}/>
                 <Route path="/jobs" element={<JobsPage/>}/>
+                <Route path="/jobs/create" element={<CreateJobPage />}/>
               </Route>
               <Route element={<PublicRoutes/>}>
                 <Route path="/login" element={<LoginPage />}/>

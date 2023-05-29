@@ -17,7 +17,7 @@ import { setDoc, doc } from 'firebase/firestore';
 
 const theme = createTheme();
 
-function Copyright(props) {
+function Copyright(props: object) {
   return (
     <Typography
       variant="body2"
@@ -105,7 +105,7 @@ export default function SignUp() {
           </Typography>
           <Box
             component="form"
-            noValidate={true}
+            noValidate={false}
             onSubmit={handleSubmit}
             sx={{ mt: 3 }}
           >

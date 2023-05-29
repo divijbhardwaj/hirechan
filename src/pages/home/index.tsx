@@ -1,7 +1,6 @@
+import { Navigate } from "react-router-dom";
 function Home() {
-  return (
-      <h1>The site is under maintenance</h1>
-  );
+  return <Navigate to="/jobs"/>
 }
 
 export default Home
