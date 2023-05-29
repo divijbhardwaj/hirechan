@@ -8,11 +8,10 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Link, useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword, setPersistence, inMemoryPersistence, GoogleAuthProvider, signInWithRedirect } from "firebase/auth";
-import { useContext } from "react";
-import { AuthSdkContext } from "reactfire";
+import { useAuth } from "reactfire";
 
 export default function SignIn() {
-  const auth = useContext(AuthSdkContext)
+  const auth = useAuth()
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {

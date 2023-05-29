@@ -1,9 +1,8 @@
-import { useContext } from "react";
 import { Navigate } from "react-router-dom";
-import { AuthSdkContext } from "reactfire";
+import { useAuth } from "reactfire";
 
 export default function Logout() {
-  const auth = useContext(AuthSdkContext);
+  const auth = useAuth();
   auth?.signOut().then(() => console.log('signed out'));
   
   return <Navigate to="/login"/>;

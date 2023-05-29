@@ -12,8 +12,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { useContext } from "react";
-import { AuthSdkContext } from "reactfire";
+import { useAuth } from "reactfire";
 
 
 function Copyright(props) {
@@ -37,7 +36,7 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUp() {
-  const auth = useContext(AuthSdkContext)
+  const auth = useAuth() // initialises auth using React context API eliminating => const auth = useContext(AuthSdkContext)
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
