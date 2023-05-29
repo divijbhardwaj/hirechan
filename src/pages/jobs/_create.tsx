@@ -104,7 +104,7 @@ export default function CreateJob() {
 
   return (
     <Layout>
-      <Typography component="h1" variant="h5">
+      <Typography component="h1" variant="h5" sx={{mt: 6}}>
         Create a job
       </Typography>
       <Box
@@ -112,7 +112,7 @@ export default function CreateJob() {
         component="form"
         noValidate={false}
         onSubmit={handleSubmit}
-        sx={{ mt: 3 }}
+        sx={{ mt: 5 }}
         >
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
