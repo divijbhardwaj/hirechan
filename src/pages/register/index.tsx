@@ -12,8 +12,10 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { useAuth } from "reactfire";
+import { useAuth, useFirestore } from "reactfire";
+import { setDoc, doc } from 'firebase/firestore';
 
+const theme = createTheme();
 
 function Copyright(props) {
   return (
@@ -33,10 +35,29 @@ function Copyright(props) {
   );
 }
 
-const theme = createTheme();
+async function addUserRef(userData, firestore) {
+  await setDoc(doc(firestore, "users", userData.email), {
+    company: {
+      id: '',
+      position: '',
+      accesslvl: 0
+    },
+    jobsApplied: [
+      // {
+      //   id: '',
+      //   status: '',
+      //   appliedOn: ''
+      // }
+    ],
+    admin: false, // if true the should have a company and an access level
+    firstName: userData?.firstName || '',
+    lastName: userData?.lastName || ''
+  });
+}
 
 export default function SignUp() {
-  const auth = useAuth() // initialises auth using React context API eliminating => const auth = useContext(AuthSdkContext)
+  const firestore = useFirestore();
+  const auth = useAuth() // initialises auth using React context API implicitly, eliminating => const auth = useContext(AuthSdkContext)
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
@@ -47,8 +68,11 @@ export default function SignUp() {
       .then((userCredential) => {
         // Signed in 
         const user = userCredential.user;
-
-        // wip: make record in firestore with email as primary key
+        addUserRef({
+          ...user,
+          firstName: data?.firstName?.value,
+          lastName: data?.lastName?.value
+        }, firestore)
         navigate('/');
       })
       .catch((error) => {

@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Link, useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword, setPersistence, inMemoryPersistence, GoogleAuthProvider, signInWithRedirect } from "firebase/auth";
+import { signInWithEmailAndPassword, setPersistence, browserLocalPersistence } from "firebase/auth";
 import { useAuth } from "reactfire";
 
 export default function SignIn() {
@@ -18,31 +18,12 @@ export default function SignIn() {
     event.preventDefault();
     const data = event.currentTarget;
     signInWithEmailAndPassword(auth, data?.email?.value, data?.password?.value)
-    .then((userCredential) => {
-      // Signed in 
-      const user = userCredential.user;
-      
-      setPersistence(auth, inMemoryPersistence)
-        .then(() => {
-          const provider = new GoogleAuthProvider();
-          // Existing and future Auth states are now persisted in the current
-          // session only. Closing the window would clear any existing state even
-          // if a user forgets to sign out.
-          // ...
-          // New sign-in will be persisted with session persistence.
-          return signInWithRedirect(auth, provider);
-        })
-        .catch((error) => {
-          // Handle Errors here.
-          const errorCode = error.code;
-          const errorMessage = error.message;
-        });
-      navigate('/');
-      // ...
+    .then(async (userCredential) => {
+      await setPersistence(auth, browserLocalPersistence);
+      return navigate('/');
     })
     .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
+      console.error(error)
     });
   };
 

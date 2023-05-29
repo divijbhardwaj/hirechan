@@ -1,4 +1,5 @@
 import HomePage from './pages/home'
+import JobsPage from './pages/jobs'
 import LoginPage from './pages/login'
 import RegisterPage from './pages/register'
 import LogoutPage from './pages/logout'
@@ -11,6 +12,7 @@ import {
   BrowserRouter as Router,
   Routes
 } from "react-router-dom";
+import PublicRoutes from './components/PublicRoutes'
 
 export default function App() {
   const firebaseApp = useFirebaseApp();
@@ -25,9 +27,12 @@ export default function App() {
             <Routes>
               <Route element={<PrivateRoutes/>}>
                 <Route path="/" element={<HomePage/>}/>
+                <Route path="/jobs" element={<JobsPage/>}/>
               </Route>
-              <Route path="/login" element={<LoginPage />}/>
-              <Route path="/register" element={<RegisterPage />}/>
+              <Route element={<PublicRoutes/>}>
+                <Route path="/login" element={<LoginPage />}/>
+                <Route path="/register" element={<RegisterPage />}/>
+              </Route>
               <Route path="/logout" element={<LogoutPage />}/>
             </Routes>
           </Router>

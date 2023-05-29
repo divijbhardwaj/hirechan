@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useSigninCheck } from 'reactfire';
 
-const PrivateRoutes = () => {
+const PublicRoutes = () => {
   const { status, data: signInCheckResult } = useSigninCheck();
 
   if(status === 'loading') {
@@ -15,8 +15,8 @@ const PrivateRoutes = () => {
   }
 
   return (
-    signInCheckResult?.signedIn ? <Outlet/> : <Navigate to="/login"/>
+    !signInCheckResult?.signedIn ? <Outlet/> : <Navigate to="/"/>
   )
 }
 
-export default PrivateRoutes;
+export default PublicRoutes;
