@@ -179,7 +179,7 @@ export default function CreateJob() {
                 <div data-color-mode="light">
                   <MDEditor
                     value={aboutJob}
-                    onChange={(v) => setAboutJob(v)}
+                    onChange={(v) => setAboutJob(v||'')}
                     id="about"
                     style={{
                       height: '50%',
