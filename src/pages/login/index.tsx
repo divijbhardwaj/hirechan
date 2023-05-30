@@ -14,11 +14,11 @@ export default function SignIn() {
   const auth = useAuth()
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: Event) => {
     event.preventDefault();
-    const data = event.currentTarget;
+    const data = event.target as HTMLFormElement;
     signInWithEmailAndPassword(auth, data?.email?.value, data?.password?.value)
-    .then(async (userCredential) => {
+    .then(async () => {
       await setPersistence(auth, browserLocalPersistence);
       return navigate('/');
     })
@@ -40,7 +40,7 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate={false} sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={() => handleSubmit} noValidate={false} sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required

@@ -13,7 +13,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useAuth, useFirestore } from "reactfire";
-import { setDoc, doc } from 'firebase/firestore';
+import { setDoc, doc, Firestore } from 'firebase/firestore';
+import { Data } from '../../interface'
 
 const theme = createTheme();
 
@@ -35,7 +36,7 @@ function Copyright(props: object) {
   );
 }
 
-async function addUserRef(userData, firestore) {
+async function addUserRef(userData: Data, firestore: Firestore) {
   await setDoc(doc(firestore, "users", userData.email), {
     company: {
       id: '',
@@ -60,9 +61,9 @@ export default function SignUp() {
   const auth = useAuth() // initialises auth using React context API implicitly, eliminating => const auth = useContext(AuthSdkContext)
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: Event) => {
     event.preventDefault();
-    const data = event.currentTarget;
+    const data = event.target as HTMLFormElement;
 
     createUserWithEmailAndPassword(auth, data?.email?.value, data?.password?.value)
       .then((userCredential) => {
@@ -106,7 +107,7 @@ export default function SignUp() {
           <Box
             component="form"
             noValidate={false}
-            onSubmit={handleSubmit}
+            onSubmit={() => handleSubmit}
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
@@ -189,7 +190,7 @@ export default function SignUp() {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 5 }} />
+        <Copyright  />
       </Container>
     </ThemeProvider>
   );

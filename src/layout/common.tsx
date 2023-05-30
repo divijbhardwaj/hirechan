@@ -7,11 +7,12 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
+import { Data } from '../interface'
 
 const theme = createTheme();
 
 
-export default function CommonLayout({children}) {
+export default function CommonLayout({children}: Data) {
   const navigate = useNavigate()
   const navItems = [
     {

@@ -4,11 +4,12 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import React from 'react';
 import { createSearchParams, useNavigate } from 'react-router-dom';
+import { Data } from '../interface'
 
-export default function JobItem({job, last}) {
+export default function JobItem({job, last}: Data) {
   const navigate = useNavigate();
-  
-  function handleJobClick(id) {
+
+  function handleJobClick(id: string) {
     navigate({
       pathname: "/jobs",
       search: createSearchParams({

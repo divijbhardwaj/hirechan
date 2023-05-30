@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography'
 import { useFirestore, useAuth, useFirestoreDocData } from 'reactfire'
 import { doc, collection, addDoc, updateDoc, arrayUnion } from "firebase/firestore";
 import CircularProgress from '@mui/material/CircularProgress'
+import { Data } from '../../interface'
 
 export default function CreateJob() {
   const [searchParams] = useSearchParams();
@@ -18,7 +19,7 @@ export default function CreateJob() {
   const navigate = useNavigate();
   const [aboutJob, setAboutJob] = useState("**About the job**\n");
   const [companyName, setCompany] = useState();
-  const [editableData, setEditableData] = useState();
+  const [editableData, setEditableData] = useState<any>();
   const queryId = searchParams.get('id');
 
   // to get job data if id is present in query
@@ -27,7 +28,7 @@ export default function CreateJob() {
 
   if(jobData) {
     if(jobStatus !== 'loading' && typeof editableData === 'undefined') {
-      setEditableData(jobData);
+      setEditableData(JSON.parse(JSON.stringify(jobData)));
       setAboutJob(jobData?.about);
       setCompany(jobData?.companyId)
     }
@@ -42,14 +43,14 @@ export default function CreateJob() {
     setCompany(user?.company?.id || '')
   }
 
-  async function addJobInCompany(jobId) {
+  async function addJobInCompany(jobId: string) {
     const companyRef = doc(firestore, `companies/${companyName}`);
     await updateDoc(companyRef, {
         jobs: arrayUnion(jobId)
     });
   }
 
-  const saveJob = (data, callback) => {
+  const saveJob = (data: Data, callback: any) => {
     const jobsCollection = collection(firestore, 'jobs');
     addDoc(jobsCollection, data).then(async (job) => {
       await addJobInCompany(job.id)
@@ -57,19 +58,19 @@ export default function CreateJob() {
     }).catch(e => console.log(e));
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: Event) => {
     e.preventDefault();
-    const data = e.currentTarget;
+    const data: Data = e?.currentTarget || {};
 
     const obj = {
-      title: data.title.value,
-      type: data.type.value,
-      location: data.location.value,
+      title: data?.title?.value,
+      type: data?.type?.value,
+      location: data?.location.value,
       about: aboutJob,
       companyId: user?.company?.id || ''
     }
 
-    saveJob(obj, (id) => navigate({
+    saveJob(obj, (id: string) => navigate({
         pathname: "/jobs",
         search: createSearchParams({
             id
@@ -80,15 +81,15 @@ export default function CreateJob() {
   } 
 
   const updateJob = () => {
-    const jobObj = {
-      ...editableData,
+    const jobObj: Data = {
+      ...(typeof editableData ==='object' ? editableData : {}),
       about: aboutJob
     }
     updateDoc(jobRef, jobObj).then(() => {
       navigate({
         pathname: "/jobs",
         search: createSearchParams({
-            id: queryId
+            id: queryId || ''
         }).toString()
       })
     });
@@ -111,7 +112,7 @@ export default function CreateJob() {
         maxWidth="md"
         component="form"
         noValidate={false}
-        onSubmit={handleSubmit}
+        onSubmit={() => handleSubmit}
         sx={{ mt: 5 }}
         >
             <Grid container spacing={2}>
@@ -123,8 +124,11 @@ export default function CreateJob() {
                   fullWidth
                   id="title"
                   label="Job title"
-                  value={editableData?.title}
-                  onInput={(e) => setEditableData({...editableData , title:e?.target.value})}
+                  value={editableData?.title || ''}
+                  onInput={(e) => {
+                    const target = e.target as HTMLInputElement;
+                    return setEditableData({...(editableData || { }), title: target.value})
+                  }}
                   autoFocus
                 />
               </Grid>
@@ -150,7 +154,10 @@ export default function CreateJob() {
                   name="type"
                   autoComplete="job-type"
                   value={editableData?.type}
-                  onInput={(e) => setEditableData({...editableData , type:e?.target.value})}
+                  onInput={(e) => {
+                    const target = e.target as HTMLInputElement;
+                    return setEditableData({...(editableData || { }) , type: target.value })
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -162,15 +169,17 @@ export default function CreateJob() {
                   name="location"
                   autoComplete="location"
                   value={editableData?.location}
-                  onInput={(e) => setEditableData({...editableData , location:e?.target.value})}
+                  onInput={(e) => {
+                    const target = e.target as HTMLInputElement;
+                    return setEditableData({...(editableData || { }) , location: target.value})
+                  }}
                 />
               </Grid>
               <Grid item xs={12} >
                 <div data-color-mode="light">
                   <MDEditor
                     value={aboutJob}
-                    onChange={setAboutJob}
-                    name="about"
+                    onChange={(v) => setAboutJob(v)}
                     id="about"
                     style={{
                       height: '50%',
@@ -185,7 +194,7 @@ export default function CreateJob() {
                   onClick={() => navigate({
                     pathname: "/jobs",
                     search: createSearchParams({
-                        id: queryId
+                        id: queryId || ''
                     }).toString()
                   })}
                   fullWidth
