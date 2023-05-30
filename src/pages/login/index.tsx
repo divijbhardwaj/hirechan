@@ -14,9 +14,9 @@ export default function SignIn() {
   const auth = useAuth()
   const navigate = useNavigate();
 
-  const handleSubmit = (event: Event) => {
-    event.preventDefault();
-    const data = event.target as HTMLFormElement;
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const data = e.target as HTMLFormElement;
     signInWithEmailAndPassword(auth, data?.email?.value, data?.password?.value)
     .then(async () => {
       await setPersistence(auth, browserLocalPersistence);
@@ -40,7 +40,7 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Box component="form" onSubmit={() => handleSubmit} noValidate={false} sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleSubmit} noValidate={false} sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required
