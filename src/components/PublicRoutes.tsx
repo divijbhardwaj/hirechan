@@ -8,7 +8,7 @@ const PublicRoutes = () => {
 
   if(status === 'loading') {
     return (
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
         <CircularProgress />
       </Box>
     )
