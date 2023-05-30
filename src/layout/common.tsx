@@ -24,6 +24,7 @@ export default function CommonLayout({children}: Data) {
       click: () => navigate('/logout')
     },
   ];
+  const toHome =  () => navigate('/jobs')
 
   return (
     <>
@@ -37,7 +38,9 @@ export default function CommonLayout({children}: Data) {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            Hirechan
+            <Button onClick={toHome} sx={{ color: '#fff' }}>
+              Hirechan
+            </Button>
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item, i) => (

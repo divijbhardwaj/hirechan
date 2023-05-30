@@ -21,6 +21,7 @@ export default function CreateJob() {
   const [companyName, setCompany] = useState();
   const [editableData, setEditableData] = useState<any>();
   const queryId = searchParams.get('id');
+  const defaultCompanyName = 'Hirechan'
 
   // to get job data if id is present in query
   const jobRef =  doc(firestore, `jobs/${queryId}`);
@@ -30,7 +31,7 @@ export default function CreateJob() {
     if(jobStatus !== 'loading' && typeof editableData === 'undefined') {
       setEditableData(JSON.parse(JSON.stringify(jobData)));
       setAboutJob(jobData?.about);
-      setCompany(jobData?.companyId)
+      setCompany(jobData?.companyId || defaultCompanyName)
     }
   }
 
@@ -40,7 +41,7 @@ export default function CreateJob() {
   // ----
 
   if(status !== 'loading' && typeof companyName === 'undefined') {
-    setCompany(user?.company?.id || '')
+    setCompany(user?.company?.id || defaultCompanyName)
   }
 
   async function addJobInCompany(jobId: string) {
@@ -58,7 +59,7 @@ export default function CreateJob() {
     }).catch(e => console.log(e));
   }
 
-  const handleSubmit = (e: Event) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const data: Data = e?.currentTarget || {};
 
@@ -81,6 +82,7 @@ export default function CreateJob() {
   } 
 
   const updateJob = () => {
+    console.log('here')
     const jobObj: Data = {
       ...(typeof editableData ==='object' ? editableData : {}),
       about: aboutJob
@@ -112,7 +114,7 @@ export default function CreateJob() {
         maxWidth="md"
         component="form"
         noValidate={false}
-        onSubmit={() => handleSubmit}
+        onSubmit={handleSubmit}
         sx={{ mt: 5 }}
         >
             <Grid container spacing={2}>
@@ -142,7 +144,6 @@ export default function CreateJob() {
                   autoComplete="company-name"
                   value={companyName || ''}
                   onChange={e => e.target.disabled = true}
-                  // onInput={(e) => setCompany(e?.target?.value)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -153,7 +154,7 @@ export default function CreateJob() {
                   label="Job type"
                   name="type"
                   autoComplete="job-type"
-                  value={editableData?.type}
+                  value={editableData?.type || ''}
                   onInput={(e) => {
                     const target = e.target as HTMLInputElement;
                     return setEditableData({...(editableData || { }) , type: target.value })
@@ -168,7 +169,7 @@ export default function CreateJob() {
                   label="Location"
                   name="location"
                   autoComplete="location"
-                  value={editableData?.location}
+                  value={editableData?.location || ''}
                   onInput={(e) => {
                     const target = e.target as HTMLInputElement;
                     return setEditableData({...(editableData || { }) , location: target.value})
